@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import taskManagementUI from "../assets/Task list view 3.svg";
-import backgroundCircle from "../assets/circles_bg.svg"; 
+import backgroundCircle from "../assets/circles_bg.svg";
 import googleLogo from "../assets/google-logo.png";
 import { signInWithGoogle } from "../firebase";
 
@@ -14,6 +14,9 @@ const Login = () => {
       console.log("Photo:", user.photoURL);
       if (user.displayName) {
         localStorage.setItem("user_name", user.displayName);
+      }
+      if (user.uid) {
+        localStorage.setItem("user_id", user.uid);
       }
       if (user.photoURL) {
         localStorage.setItem("user_photo", user.photoURL);
@@ -37,7 +40,8 @@ const Login = () => {
       <div className="z-10 flex flex-col items-center text-center md:items-start md:text-left w-full max-w-lg p-6">
         <h1 className="text-4xl font-bold text-purple-700 mb-4">TaskBuddy</h1>
         <p className="text-gray-600 text-lg mb-6">
-          Streamline your workflow and track progress effortlessly with our all-in-one task management app.
+          Streamline your workflow and track progress effortlessly with our
+          all-in-one task management app.
         </p>
         <button
           className="flex items-center justify-center bg-black text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-700 focus:ring-offset-2"

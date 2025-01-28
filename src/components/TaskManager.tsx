@@ -173,7 +173,7 @@ const TaskManager = ({
       status: newTask.status || "TO-DO",
       category: newTask.category || ["Work"],
       description: newTask.description || "",
-      createdBy: "defaultUser",
+      createdBy: localStorage.getItem("user_id") || "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -600,7 +600,14 @@ const TaskManager = ({
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                           >
-                            <MenuItem onClick={handleMenuClose}>Edit</MenuItem>
+                            <MenuItem
+                              onClick={(event) => {
+                                handleMenuClose(event);
+                                handleTaskClick(task);
+                              }}
+                            >
+                              Edit
+                            </MenuItem>
                             <MenuItem
                               onClick={(event) => {
                                 handleMenuClose(event);

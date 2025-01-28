@@ -34,12 +34,16 @@ const AddTaskModal = ({
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
-  const [status, setStatus] = useState<"TO-DO" | "IN-PROGRESS" | "COMPLETED">("TO-DO");
+  const [status, setStatus] = useState<"TO-DO" | "IN-PROGRESS" | "COMPLETED">(
+    "TO-DO"
+  );
   const [attachment, setAttachment] = useState<File | undefined>(undefined);
 
   const handleCategoryChange = (category: string) => {
     setCategories((prev) =>
-      prev.includes(category) ? prev.filter((cat) => cat !== category) : [...prev, category]
+      prev.includes(category)
+        ? prev.filter((cat) => cat !== category)
+        : [...prev, category]
     );
   };
 
@@ -57,7 +61,7 @@ const AddTaskModal = ({
         dueDate,
         category: categories,
         status,
-        createdBy: localStorage.getItem("user_name") || "",
+        createdBy: localStorage.getItem("user_id") || "",
         attachment: attachment || undefined,
       });
       onClose();
@@ -67,7 +71,6 @@ const AddTaskModal = ({
   return (
     <Modal open={open} onClose={onClose}>
       <Box
-      
         sx={{
           position: "absolute",
           top: "50%",
@@ -81,8 +84,13 @@ const AddTaskModal = ({
         }}
       >
         {/* Modal Header */}
-        <Box display="flex" justifyContent="space-between" alignItems="center" p={3}>
-          <Typography variant="h5" fontWeight="semi-bold" fontFamily={'mulish'}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          p={3}
+        >
+          <Typography variant="h5" fontWeight="semi-bold" fontFamily={"mulish"}>
             Create Task
           </Typography>
           <IconButton onClick={onClose}>
@@ -99,8 +107,7 @@ const AddTaskModal = ({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             margin="normal"
-            InputProps={{ style: { fontFamily: 'mulish' } }}
-          
+            InputProps={{ style: { fontFamily: "mulish" } }}
           />
 
           {/* Description */}
@@ -114,24 +121,32 @@ const AddTaskModal = ({
             onChange={(e) => setDescription(e.target.value)}
             margin="normal"
             helperText={`${description.length}/300 characters`}
-            InputProps={{ style: { fontFamily: 'mulish' } }}
+            InputProps={{ style: { fontFamily: "mulish" } }}
           />
 
           <Box display="flex" gap={2} mt={2}>
             {/* Task Category */}
             <Box flex={1}>
-              <Typography variant="subtitle2" fontWeight="bold" fontFamily={'mulish'}>
+              <Typography
+                variant="subtitle2"
+                fontWeight="bold"
+                fontFamily={"mulish"}
+              >
                 Task Category*
               </Typography>
               <Box display="flex" gap={1}>
-                {['Work', 'Personal'].map((category) => (
+                {["Work", "Personal"].map((category) => (
                   <Chip
                     key={category}
                     label={category}
                     onClick={() => handleCategoryChange(category)}
-                    color={categories.includes(category) ? 'primary' : 'default'}
-                    variant={categories.includes(category) ? 'filled' : 'outlined'}
-                    style={{fontFamily: 'mulish'}}
+                    color={
+                      categories.includes(category) ? "primary" : "default"
+                    }
+                    variant={
+                      categories.includes(category) ? "filled" : "outlined"
+                    }
+                    style={{ fontFamily: "mulish" }}
                   />
                 ))}
               </Box>
@@ -152,7 +167,11 @@ const AddTaskModal = ({
               <Select
                 displayEmpty
                 value={status}
-                onChange={(e) => setStatus(e.target.value as "TO-DO" | "IN-PROGRESS" | "COMPLETED")}
+                onChange={(e) =>
+                  setStatus(
+                    e.target.value as "TO-DO" | "IN-PROGRESS" | "COMPLETED"
+                  )
+                }
               >
                 <MenuItem value="TO-DO">To-Do</MenuItem>
                 <MenuItem value="IN-PROGRESS">In Progress</MenuItem>
@@ -162,19 +181,43 @@ const AddTaskModal = ({
           </Box>
 
           {/* File Upload */}
-          <Box mt={3} p={2} border="2px dashed #ccc" borderRadius={2} textAlign="center" sx={{ cursor: 'pointer' }}>
-            <input type="file" hidden onChange={handleFileUpload} id="file-upload" />
+          <Box
+            mt={3}
+            p={2}
+            border="2px dashed #ccc"
+            borderRadius={2}
+            textAlign="center"
+            sx={{ cursor: "pointer" }}
+          >
+            <input
+              type="file"
+              hidden
+              onChange={handleFileUpload}
+              id="file-upload"
+            />
             <label htmlFor="file-upload">
               <Typography variant="body2" color="textSecondary">
-                {attachment ? attachment.name : "Drop your files here or Click to Upload"}
+                {attachment
+                  ? attachment.name
+                  : "Drop your files here or Click to Upload"}
               </Typography>
             </label>
           </Box>
         </Box>
 
         {/* Footer Buttons */}
-        <Box display="flex" justifyContent="flex-end" p={3} bgcolor="#F1F1F1" className="mt-4">
-          <Button variant="outlined" onClick={onClose} sx={{ borderRadius: 5, mr: 2 }}>
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          p={3}
+          bgcolor="#F1F1F1"
+          className="mt-4"
+        >
+          <Button
+            variant="outlined"
+            onClick={onClose}
+            sx={{ borderRadius: 5, mr: 2 }}
+          >
             Cancel
           </Button>
           <Button

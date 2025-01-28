@@ -8,7 +8,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { Task } from "../types/task";
@@ -47,8 +47,10 @@ export const addTask = async (
 
     console.log("Adding task:", newTask);
     const docRef = await addDoc(tasksRef, newTask);
+    console.log(docRef);
 
     const addedTaskSnapshot = await getDoc(doc(db, "tasks", docRef.id));
+    console.log(addedTaskSnapshot);
 
     if (!addedTaskSnapshot.exists()) {
       throw new Error("Failed to fetch the added task.");
@@ -78,7 +80,6 @@ export const addTask = async (
   }
 };
 
-
 export const updateTask = async (
   taskId: string,
   updatedFields: Partial<Task>
@@ -88,7 +89,10 @@ export const updateTask = async (
       Object.entries(updatedFields).filter(([_, value]) => value !== undefined)
     );
 
-    if ("attachment" in updatedFields && updatedFields.attachment === undefined) {
+    if (
+      "attachment" in updatedFields &&
+      updatedFields.attachment === undefined
+    ) {
       validFields.attachment = "";
     }
 

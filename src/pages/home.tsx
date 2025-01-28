@@ -3,7 +3,12 @@ import Header from "../components/Header";
 import Toolbar from "../components/Toolbar";
 import AddTaskModal from "../components/AddtaskModal";
 import TaskDetailsDialog from "../components/TaskDetailsDialog";
-import { fetchTasks, addTask, updateTask, deleteTask } from "../services/taskService";
+import {
+  fetchTasks,
+  addTask,
+  updateTask,
+  deleteTask,
+} from "../services/taskService";
 import { Task } from "../types/task";
 import TaskManager from "../components/TaskManager";
 import BoardView from "../components/BoardView";
@@ -16,7 +21,11 @@ const Home = () => {
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState<{ category: string; startDate: Date | null; endDate: Date | null }>({
+  const [filters, setFilters] = useState<{
+    category: string;
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
     category: "",
     startDate: null,
     endDate: null,
@@ -35,12 +44,13 @@ const Home = () => {
   const user = {
     name: localStorage.getItem("user_name") || "",
     photo: localStorage.getItem("user_photo") || "",
+    uid: localStorage.getItem("user_id") || "",
   };
 
   useEffect(() => {
     const loadTasks = async () => {
       try {
-        const fetchedTasks = await fetchTasks(user.name);
+        const fetchedTasks = await fetchTasks(user.uid);
         setTasks(fetchedTasks);
         setFilteredTasks(fetchedTasks);
       } catch (error) {
@@ -49,9 +59,11 @@ const Home = () => {
     };
 
     loadTasks();
-  }, [user.name]);
+  }, [user.uid]);
 
-  const handleAddTask = async (taskData: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
+  const handleAddTask = async (
+    taskData: Omit<Task, "id" | "createdAt" | "updatedAt">
+  ) => {
     try {
       const newTask = await addTask(taskData);
       if (newTask) {
@@ -64,11 +76,16 @@ const Home = () => {
     }
   };
 
-  const handleUpdateTask = async (taskId: string, updatedFields: Partial<Task>) => {
+  const handleUpdateTask = async (
+    taskId: string,
+    updatedFields: Partial<Task>
+  ) => {
     try {
       await updateTask(taskId, updatedFields);
       const updatedTasks = tasks.map((task) =>
-        task.id === taskId ? { ...task, ...updatedFields, updatedAt: new Date().toISOString() } : task
+        task.id === taskId
+          ? { ...task, ...updatedFields, updatedAt: new Date().toISOString() }
+          : task
       );
       setTasks(updatedTasks);
       applyFilters(updatedTasks, filters, searchQuery);
@@ -93,17 +110,27 @@ const Home = () => {
     applyFilters(tasks, filters, query);
   };
 
-  const handleFilterChange = (updatedFilters: { category: string; startDate: Date | null; endDate: Date | null }) => {
+  const handleFilterChange = (updatedFilters: {
+    category: string;
+    startDate: Date | null;
+    endDate: Date | null;
+  }) => {
     setFilters(updatedFilters);
     applyFilters(tasks, updatedFilters, searchQuery);
   };
 
-  const applyFilters = (allTasks: Task[], appliedFilters: typeof filters, searchQuery: string) => {
+  const applyFilters = (
+    allTasks: Task[],
+    appliedFilters: typeof filters,
+    searchQuery: string
+  ) => {
     let filtered = [...allTasks];
 
     // Filter by category
     if (appliedFilters.category) {
-      filtered = filtered.filter((task) => task.category.includes(appliedFilters.category));
+      filtered = filtered.filter((task) =>
+        task.category.includes(appliedFilters.category)
+      );
     }
 
     // Filter by date range
@@ -118,9 +145,10 @@ const Home = () => {
 
     // Search filter
     if (searchQuery.trim()) {
-      filtered = filtered.filter((task) =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.description.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (task) =>
+          task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          task.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -131,7 +159,9 @@ const Home = () => {
     <div className="min-h-screen bg-white">
       <Header user={user} />
       <main className="p-4">
-        {!isMobile && <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />}
+        {!isMobile && (
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        )}
         <Toolbar
           onAddTask={() => setIsModalOpen(true)}
           onSearch={handleSearch}
