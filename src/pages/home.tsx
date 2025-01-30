@@ -82,13 +82,15 @@ const Home = () => {
   ) => {
     try {
       await updateTask(taskId, updatedFields);
-      const updatedTasks = tasks.map((task) =>
-        task.id === taskId
-          ? { ...task, ...updatedFields, updatedAt: new Date().toISOString() }
-          : task
-      );
-      setTasks(updatedTasks);
-      applyFilters(updatedTasks, filters, searchQuery);
+      setTasks((prevTasks) => {
+        const updatedTasks = prevTasks.map((task) =>
+          task.id === taskId
+            ? { ...task, ...updatedFields, updatedAt: new Date().toISOString() }
+            : task
+        );
+        applyFilters(updatedTasks, filters, searchQuery);
+        return updatedTasks;
+      });
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -97,9 +99,11 @@ const Home = () => {
   const handleDeleteTask = async (taskId: string) => {
     try {
       await deleteTask(taskId);
-      const updatedTasks = tasks.filter((task) => task.id !== taskId);
-      setTasks(updatedTasks);
-      applyFilters(updatedTasks, filters, searchQuery);
+      setTasks((prevTasks) => {
+        const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
+        applyFilters(updatedTasks, filters, searchQuery);
+        return updatedTasks;
+      });
     } catch (error) {
       console.error("Error deleting task:", error);
     }
