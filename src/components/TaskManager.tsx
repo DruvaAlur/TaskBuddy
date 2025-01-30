@@ -82,7 +82,7 @@ const TaskManager = ({
     setIsSnackbarOpen(true);
   };
 
-  const handleTaskClick = (task: Task) => {
+  const handleTaskClick = (task: Task | null) => {
     setSelectedTask(task);
     setIsDialogOpen(true);
   };
@@ -603,7 +603,7 @@ const TaskManager = ({
                             <MenuItem
                               onClick={(event) => {
                                 handleMenuClose(event);
-                                handleTaskClick(task);
+                                handleTaskClick(selectedTask);
                               }}
                             >
                               Edit
